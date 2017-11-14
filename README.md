@@ -36,7 +36,7 @@ Download the [Kitti Road dataset](http://www.cvlibs.net/datasets/kitti/eval_road
 
 #### Video Result
 
-I save the tensorflow model and loaded it up in my jupyter notebook [experiment.ipynb](), model processes each frame individually.
+I save the tensorflow model and loaded it up in my jupyter notebook [experiment.ipynb](https://github.com/chocolateHszd/Semantic-Segmentation/blob/master/experiment.ipynb), model processes each frame individually.
 
 [video output]:()
 
@@ -49,9 +49,7 @@ Make sure you have the following is installed:
  - [TensorFlow](https://www.tensorflow.org/)
  - [NumPy](http://www.numpy.org/)
  - [SciPy](https://www.scipy.org/)
- - [Tensorboard]()
-##### Dataset
-
+ - [Tensorboard](https://www.tensorflow.org/get_started/graph_viz)
 
 ### Start
 
