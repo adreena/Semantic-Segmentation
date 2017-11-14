@@ -57,23 +57,6 @@ def maybe_download_pretrained_vgg(data_dir):
         # Remove zip file to save space
         os.remove(os.path.join(vgg_path, vgg_filename))
 
-        
-def convert_color(img, conv='RGB2YCrCb'):
-    if conv == 'RGB2YCrCb':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2YCrCb)
-    if conv == 'BGR2YCrCb':
-        return cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
-    if conv == 'LUV':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2LUV)
-    if conv == 'HSV':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
-    if color_space == 'HLS':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
-    if color_space == 'YUV':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
-    if color_space == 'BGR':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-
 def gen_batch_function(data_folder, image_shape):
     """
     Generate function to create batches of training data
@@ -97,7 +80,6 @@ def gen_batch_function(data_folder, image_shape):
         for batch_i in range(0, len(image_paths), batch_size):
             images = []
             gt_images = []
-            #print(batch_i, " , ",batch_i, " : ",batch_i+batch_size ,",", len(image_paths[batch_i:batch_i+batch_size]))
             for image_file in image_paths[batch_i:batch_i+batch_size]:
                 gt_image_file = label_paths[os.path.basename(image_file)]
 
@@ -107,37 +89,46 @@ def gen_batch_function(data_folder, image_shape):
                 gt_image = scipy.misc.imresize(scipy.misc.imread(gt_image_file), image_shape)
                 gt_image_flip = np.flip(gt_image, axis=1)
                 
-                #----------
+                #---------- classification : single road---------------------
                 #gt_bg = np.all(gt_image == background_color, axis=2)
                 #gt_bg = gt_bg.reshape(*gt_bg.shape, 1)
                 #gt_image = np.concatenate((gt_bg, np.invert(gt_bg)), axis=2)
-                #----------
+                #------------------------------------------------------------
                 
+                
+                #---------- classification : multi road----------------------
                 gt_bg = np.all(gt_image == background_color, axis=2)
                 gt_bg_flip = np.all(gt_image_flip == background_color, axis=2)
                 
-                r_mask = ((gt_image == other_road_color) | (gt_image == background_color))
-                gt_r = np.invert(np.all(r_mask, axis=2))
+                # road segment
+                road_mask = ((gt_image == other_road_color) | (gt_image == background_color))
+                gt_road = np.invert(np.all(road_mask, axis=2))
                 
-                r_mask_flip = ((gt_image_flip == other_road_color) | (gt_image_flip == background_color))
-                gt_r_flip = np.invert(np.all(r_mask_flip, axis=2))
+                # flip of road segment
+                road_mask_flip = ((gt_image_flip == other_road_color) | (gt_image_flip == background_color))
+                gt_road_flip = np.invert(np.all(road_mask_flip, axis=2))
                 
-                or_mask = (gt_image == other_road_color)
-                gt_or = np.all(or_mask, axis=2)
+                # other_road segment
+                oher_road_mask = (gt_image == other_road_color)
+                gt_other_road = np.all(oher_road_mask, axis=2)
                 
-                or_mask_flip = (gt_image_flip == other_road_color)
-                gt_or_flip = np.all(or_mask_flip, axis=2)
+                # flip of other_road segment
+                other_road_mask_flip = (gt_image_flip == other_road_color)
+                gt_oher_road_flip = np.all(other_road_mask_flip, axis=2)
 
+                # reshaping segments
                 gt_bg = gt_bg.reshape(*gt_bg.shape, 1)
-                gt_or = gt_or.reshape(*gt_or.shape, 1)
-                gt_r = gt_r.reshape(*gt_r.shape, 1)
+                gt_other_road = gt_other_road.reshape(*gt_other_road.shape, 1)
+                gt_road = gt_road.reshape(*gt_road.shape, 1)
                 
-                gt_bg_flip = gt_bg.reshape(*gt_bg_flip.shape, 1)
-                gt_or_flip = gt_or.reshape(*gt_or_flip.shape, 1)
-                gt_r_flip = gt_r.reshape(*gt_r_flip.shape, 1)
+                # reshaping flip segments
+                gt_bg_flip = gt_bg_flip.reshape(*gt_bg_flip.shape, 1)
+                gt_oher_road_flip = gt_oher_road_flip.reshape(*gt_oher_road_flip.shape, 1)
+                gt_road_flip = gt_road_flip.reshape(*gt_road_flip.shape, 1)
                 
-                gt_image = np.concatenate((gt_bg, gt_r,gt_or), axis=2)
-                gt_image_flip = np.concatenate((gt_bg_flip, gt_r_flip,gt_or_flip), axis=2)
+                # concatenating classes bg, road, other_road
+                gt_image = np.concatenate((gt_bg, gt_road, gt_other_road), axis=2)
+                gt_image_flip = np.concatenate((gt_bg_flip, gt_road_flip, gt_oher_road_flip), axis=2)
                 
                 images.append(image)
                 images.append(image_flip)
@@ -172,9 +163,11 @@ def gen_test_output(sess, logits, keep_prob, image_pl, data_folder, image_shape)
         im_softmax_other_road = im_softmax[0][:, 2].reshape(image_shape[0], image_shape[1])
         segmentation_other_road = (im_softmax_other_road > 0.5).reshape(image_shape[0], image_shape[1], 1)
         
+        # green road
         mask_road = np.dot(segmentation_road, np.array([[0, 255, 0, 127]]))
         mask_road = scipy.misc.toimage(mask_road, mode="RGBA")
         
+        # blue other_road
         mask_other_road = np.dot(segmentation_other_road, np.array([[0, 0, 255, 127]]))
         mask_other_road = scipy.misc.toimage(mask_other_road, mode="RGBA")
         
