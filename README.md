@@ -32,6 +32,21 @@ Download the [Kitti Road dataset](http://www.cvlibs.net/datasets/kitti/eval_road
 
 #### Image Results
 
+Here are the results for 3 models, first model is trained on 1000 epochs without augmentation and only 1 road, 2nd models i trained on 2 roads without augmentation and 500 epochs, and the last model is trained on 2 roads with augmentation and 1000 epochs.
+
+ <table style="width:100%">
+  <tr>
+    <td>Single Road (1000 epochs without augmentation)</td>
+    <td>Multiple Roads (500 epochs without augmentation)</td>
+    <td>Multiple Roads (1000 epochs with augmentation)</td>
+  </tr>
+  <tr>
+    <td><img src="./runs/single_road/um_000001.png" width="450" height="200"/></td>
+    <td><img src="./runs/multi_road/um_000001.png" width="450" height="200"/></td>
+    <td></td>
+  </tr>
+</table>
+
 #### Tensorboard Loss
 
 #### Video Result
