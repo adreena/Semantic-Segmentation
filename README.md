@@ -3,6 +3,45 @@
 
 Semantic segmentation is understanding an image at pixel level i.e, assigning each pixel in the image an object class.In this project, the goal is labeling the pixels of a road in images using a Fully Convolutional Network (FCN).
 
+The goals of this project are the following:
+
+ * Loading Pretrained VGG Model into TensorFlow
+ * Creating the layers for a fully convolutional network
+ * Building skip-layers using the vgg layers
+ * Optimizing the model loss
+ * Training model on segmented images (3 classes: background, road, other-road)
+
+## Description
+
+### Available Data
+
+Download the [Kitti Road dataset](http://www.cvlibs.net/datasets/kitti/eval_road.php) from [here](http://www.cvlibs.net/download.php?file=data_road.zip).  Extract the dataset in the `data` folder.  This will create the folder `data_road` with all the training a test images.
+
+### Approach
+
+* Encoder: load the vgg model and weights for layers (3,4 & 7)
+* Conv1x1: add a convolution filer with kernel_size (1,1) to the last layer to keep spatial information
+* Decoder: add 3 upsample layers and skip connections in between to add information from multiple resolutions
+* Data processing: 
+  * categorization: images & ground truth images are provided in Kitti dataset, ground_truth images should be categorized into 3 classes of background, road & other_road
+  * data augmentation: flipping the images also helps adding more data to the training set
+* Learning rate: 0.0001
+* drop_out: 0.5
+* Number of Epochs: 1000
+* Batch_size: 16
+
+#### Image Results
+
+#### Tensorboard Loss
+
+#### Video Result
+
+I save the tensorflow model and loaded it up in my jupyter notebook [experiment.ipynb](), model processes each frame individually.
+
+[video output]:()
+
+
+
 ### Setup
 ##### Frameworks and Packages
 Make sure you have the following is installed:
@@ -10,14 +49,12 @@ Make sure you have the following is installed:
  - [TensorFlow](https://www.tensorflow.org/)
  - [NumPy](http://www.numpy.org/)
  - [SciPy](https://www.scipy.org/)
- - [Tensorboard]
+ - [Tensorboard]()
 ##### Dataset
-Download the [Kitti Road dataset](http://www.cvlibs.net/datasets/kitti/eval_road.php) from [here](http://www.cvlibs.net/download.php?file=data_road.zip).  Extract the dataset in the `data` folder.  This will create the folder `data_road` with all the training a test images.
+
 
 ### Start
-##### Implement
-Implement the code in the `main.py` module indicated by the "TODO" comments.
-The comments indicated with "OPTIONAL" tag are not required to complete.
+
 ##### Run
 Run the following command to run the project:
 ```
@@ -26,13 +63,3 @@ python main.py
 **Note** If running this in Jupyter Notebook system messages, such as those regarding test status, may appear in the terminal rather than the notebook.
 
 ### Submission
-1. Ensure you've passed all the unit tests.
-2. Ensure you pass all points on [the rubric](https://review.udacity.com/#!/rubrics/989/view).
-3. Submit the following in a zip file.
- - `helper.py`
- - `main.py`
- - `project_tests.py`
- - Newest inference images from `runs` folder  (**all images from the most recent run**)
- 
- ## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
