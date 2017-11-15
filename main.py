@@ -103,7 +103,7 @@ tests.test_optimize(optimize)
 
 
 def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,
-             correct_label, keep_prob, learning_rate,summary_op, writer):
+             correct_label, keep_prob, learning_rate, model_name):
     """
     Train neural network and print out the loss during training.
     :param sess: TF Session
@@ -117,35 +117,40 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     :param keep_prob: TF Placeholder for dropout keep probability
     :param learning_rate: TF Placeholder for learning rate
     """
+    # tensorboard setup
+    writer = tf.summary.FileWriter("./{0}".format(model_name), graph=tf.get_default_graph())
+    tf.summary.scalar("loss", cross_entropy_loss)
+    summary_op = tf.summary.merge_all()
+    
     counter =0
     sess.run(tf.global_variables_initializer())
     # TODO: Implement function
     for epoch in range(0, epochs):
-        print("epoch:",epoch)
         counter=0
         for train_images, train_labels in get_batches_fn(batch_size):
-            print("counter:",counter)
-            _, summary = sess.run([train_op, summary_op], feed_dict={correct_label: train_labels, 
+            _,loss, summary = sess.run([train_op,cross_entropy_loss, summary_op], feed_dict={correct_label: train_labels, 
                                           input_image: train_images, 
-                                          learning_rate: 0.0001 ,#0.0001,
+                                          learning_rate: 0.0001 ,
                                           keep_prob: 0.5})
+            print("Epoch: {0} Loss: {1:.4f}".format(epoch, loss))
             writer.add_summary(summary, epoch * batch_size + counter)
             counter+=1
     
     pass
-#tests.test_train_nn(train_nn)
+tests.test_train_nn(train_nn)
 
 
 
 
 def run():
-    num_classes = 3
+    num_classes = 3 # background, road, other_road
     image_shape = (160, 576)
     data_dir = './data'
     runs_dir = './runs'
     tests.test_for_kitti_dataset(data_dir)
     batch_size = 16
-    epochs = 1000  #1000
+    epochs = 1000 
+    model_name = "my_model8"
     
     # Download pretrained vgg model
     helper.maybe_download_pretrained_vgg(data_dir)
@@ -160,7 +165,6 @@ def run():
     with tf.Session() as sess:
         sess.run(init)
        
-        writer = tf.summary.FileWriter("./logs/Multi_Classifier_1000_flip", graph=tf.get_default_graph())
 
         # Path to vgg model
         vgg_path = os.path.join(data_dir, 'vgg')
@@ -172,35 +176,26 @@ def run():
 
         # TODO: Build NN using load_vgg, layers, and optimize function
         input_image, keep_prob, vgg_layer3_out, vgg_layer4_out, vgg_layer7_out = load_vgg(sess, vgg_path)
-        print("*** vgg loaded")
+        
         nn_last_layer = layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
-        print("*** layers created")
+        
         learning_rate = tf.placeholder(dtype=tf.float32, name="learning_rate")
         correct_label = tf.placeholder(dtype=tf.int32, shape=[None, None, None, num_classes])
         
         logits, train_op, cross_entropy_loss = optimize(nn_last_layer,  correct_label, learning_rate, num_classes)
-        print("*** optimizer")
         
-        tf.summary.scalar("loss", cross_entropy_loss)
-        summary_op = tf.summary.merge_all()
         saver = tf.train.Saver()
         # TODO: Train NN using the train_nn function
         train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,\
-                 correct_label, keep_prob, learning_rate, summary_op, writer)
-        print("*** training ")
-        
-       
+                 correct_label, keep_prob, learning_rate, model_name)
+        print("*** training done !")
         
         # TODO: Save inference data using helper.save_inference_samples
         helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
-        print("*** saved1")
-        
-        saver.save(sess,'./mymodel_8.ckpt')
-        print("*** saved2")
+        saver.save(sess,'./{0}.ckpt'.format(model_name))
 
-
-        
         # OPTIONAL: Apply the trained model to a video
+        # done in jupyter file
 
 
 if __name__ == '__main__':
