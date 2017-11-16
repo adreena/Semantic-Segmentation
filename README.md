@@ -51,9 +51,9 @@ Here are the results for 3 models, first model is trained on 1000 epochs without
     <td><img src="./runs/final_version/um_000044.png" height="160"/></td>
   </tr>
   <tr>
-    <td><img src="./runs/single_road_1000_epochs/umm_000094.png" height="160"/></td>
-    <td><img src="./runs/multi_road_500_epochs/umm_000094.png"  height="160"/></td>
-    <td><img src="./runs/final_version/umm_000094.png"  height="160"/></td>
+    <td><img src="./runs/single_road_1000_epochs/um_000094.png.png" height="160"/></td>
+    <td><img src="./runs/multi_road_500_epochs/um_000094.png.png"  height="160"/></td>
+    <td><img src="./runs/final_version/um_000094.png.png"  height="160"/></td>
   </tr>
 </table>
 
