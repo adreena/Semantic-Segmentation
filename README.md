@@ -65,7 +65,7 @@ As shown above training network on 2 roads need more data with more variety of o
 
 Here is the tensorboard graph for the loss minimization:
 
-<img src="./tensorboard.png"  height="160"/>
+<img src="./tensorboard.png"  width="500" height="300"/>
 
 #### Video Result
 
