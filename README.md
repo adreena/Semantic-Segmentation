@@ -19,6 +19,8 @@ Download the [Kitti Road dataset](http://www.cvlibs.net/datasets/kitti/eval_road
 
 ### Approach
 
+Current FCN8 implementation follows this [paper](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf)
+
 * Encoder: load the vgg model and weights for layers (3,4 & 7)
 * Conv1x1: add a convolution filer with kernel_size (1,1) to the last layer to keep spatial information
 * Decoder: add 3 upsample layers and skip connections in between to add information from multiple resolutions
@@ -57,13 +59,18 @@ Here are the results for 3 models, first model is trained on 1000 epochs without
   </tr>
 </table>
 
+As shown above training network on 2 roads need more data with more variety of other side of the road, overall all networks performed very good on 500-1000 epochs. Further improvement would require more images and angles, some preprocessing can also improve the results by removing noisy areas from road_detection such as limiting the scope of image to filter sky.
+
 #### Tensorboard Loss
+
+Here is the tensorboard graph for the loss minimization:
+<img src="./tensorboard.png"  height="160"/>
 
 #### Video Result
 
 I save the tensorflow model and loaded it up in my jupyter notebook [experiment.ipynb](https://github.com/chocolateHszd/Semantic-Segmentation/blob/master/experiment.ipynb), model processes each frame individually.
 
-[video output]:()
+[video output]:(Semantic-Segmentation/video/output.mp4)
 
 
 
