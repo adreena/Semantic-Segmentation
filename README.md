@@ -57,6 +57,11 @@ Here are the results for 3 models, first model is trained on 1000 epochs without
     <td><img src="./runs/multi_road_500_epochs/umm_000068.png"  height="160"/></td>
     <td><img src="./runs/final_version/umm_000068.png"  height="160"/></td>
   </tr>
+   <tr>
+    <td><img src="./runs/single_road_1000_epochs/uu_000098.png" height="160"/></td>
+    <td><img src="./runs/multi_road_500_epochs/uu_000098.png"  height="160"/></td>
+    <td><img src="./runs/final_version/uu_000098.png"  height="160"/></td>
+  </tr>
 </table>
 
 As shown above training network on 2 roads need more data with more variety of other side of the road, overall all networks performed very good on 500-1000 epochs. Further improvement would require more images and angles, some preprocessing can also improve the results by removing noisy areas from road_detection such as limiting the scope of image to filter sky.
@@ -65,7 +70,7 @@ As shown above training network on 2 roads need more data with more variety of o
 
 Here is the tensorboard graph for the loss minimization:
 
-<img src="./tensorboard.png"  width="500" height="300"/>
+<img src="./tensorboard.png"  width="600" height="400"/>
 
 #### Video Result
 
