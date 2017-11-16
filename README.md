@@ -53,9 +53,9 @@ Here are the results for 3 models, first model is trained on 1000 epochs without
     <td><img src="./runs/final_version/um_000044.png" height="160"/></td>
   </tr>
   <tr>
-    <td><img src="./runs/single_road_1000_epochs/um_000032.png" height="160"/></td>
-    <td><img src="./runs/multi_road_500_epochs/um_000032.png"  height="160"/></td>
-    <td><img src="./runs/final_version/um_000032.png"  height="160"/></td>
+    <td><img src="./runs/single_road_1000_epochs/umm_000068.png.png" height="160"/></td>
+    <td><img src="./runs/multi_road_500_epochs/umm_000068.png.png"  height="160"/></td>
+    <td><img src="./runs/final_version/umm_000068.png.png"  height="160"/></td>
   </tr>
 </table>
 
@@ -64,13 +64,14 @@ As shown above training network on 2 roads need more data with more variety of o
 #### Tensorboard Loss
 
 Here is the tensorboard graph for the loss minimization:
+
 <img src="./tensorboard.png"  height="160"/>
 
 #### Video Result
 
 I save the tensorflow model and loaded it up in my jupyter notebook [experiment.ipynb](https://github.com/chocolateHszd/Semantic-Segmentation/blob/master/experiment.ipynb), model processes each frame individually.
 
-[video output]:(Semantic-Segmentation/video/output.mp4)
+[video output]:(./video/output.mp4)
 
 
 
