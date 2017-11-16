@@ -53,9 +53,9 @@ Here are the results for 3 models, first model is trained on 1000 epochs without
     <td><img src="./runs/final_version/um_000044.png" height="160"/></td>
   </tr>
   <tr>
-    <td><img src="./runs/single_road_1000_epochs/umm_000068.png.png" height="160"/></td>
-    <td><img src="./runs/multi_road_500_epochs/umm_000068.png.png"  height="160"/></td>
-    <td><img src="./runs/final_version/umm_000068.png.png"  height="160"/></td>
+    <td><img src="./runs/single_road_1000_epochs/umm_000068.png" height="160"/></td>
+    <td><img src="./runs/multi_road_500_epochs/umm_000068.png"  height="160"/></td>
+    <td><img src="./runs/final_version/umm_000068.png"  height="160"/></td>
   </tr>
 </table>
 
@@ -91,6 +91,3 @@ Run the following command to run the project:
 ```
 python main.py
 ```
-**Note** If running this in Jupyter Notebook system messages, such as those regarding test status, may appear in the terminal rather than the notebook.
-
-### Submission
